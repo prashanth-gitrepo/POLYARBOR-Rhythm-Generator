@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PolyArbor Rhythm Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-deep: #121212;
+            --bg-panel: #222222;
+            --bg-surface: #2D2D2D;
+            --border-muted: #444646;
+            --text-main: #DAD0AF;
+            --accent-green: #8FFD00;
+            --accent-blue: #5E99B6;
+            --accent-orange: #CD6331;
+            --font-ui: 'Inter', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--font-ui);
+            margin: 0;
+            line-height: 1.6;
+            background-image: 
+                linear-gradient(rgba(18, 18, 18, 0.95), rgba(18, 18, 18, 0.95)),
+                repeating-linear-gradient(0deg, transparent, transparent 2px, #000000 3px);
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-deep); }
+        ::-webkit-scrollbar-thumb { background: var(--border-muted); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-orange); }
+
+        /* LAYOUT CONTAINERS */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .rack-mount {
+            border: 2px solid var(--border-muted);
+            background: var(--bg-panel);
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 40px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .rack-mount::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--accent-orange), var(--accent-blue));
+            opacity: 0.8;
+        }
+
+        /* TYPOGRAPHY */
+        h1, h2, h3 {
+            font-family: var(--font-code);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0;
+        }
+
+        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        h2 { 
+            color: var(--accent-orange); 
+            border-bottom: 1px solid var(--border-muted);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        h2::before {
+            content: '►';
+            margin-right: 10px;
+            font-size: 0.8em;
+            color: var(--accent-green);
+        }
+
+        code {
+            font-family: var(--font-code);
+            background: rgba(0,0,0,0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--accent-blue);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 1px solid var(--border-muted);
+        }
+
+        .hero-title strong { color: var(--accent-orange); }
+        .hero-subtitle { color: var(--accent-blue); font-size: 1.1rem; margin-bottom: 20px; display: block;}
+
+        .badge-container img {
+            height: 28px;
+            margin: 0 4px;
+            transition: transform 0.2s;
+        }
+        .badge-container img:hover { transform: translateY(-2px); }
+
+        /* NAVIGATION */
+        .nav-strip {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            background: var(--bg-surface);
+            padding: 10px;
+            border-bottom: 1px solid var(--border-muted);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-link {
+            color: var(--text-main);
+            text-decoration: none;
+            font-family: var(--font-code);
+            font-size: 0.9rem;
+            padding: 5px 15px;
+            border: 1px solid transparent;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        .nav-link:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+            background: rgba(143, 253, 0, 0.1);
+            box-shadow: 0 0 10px rgba(143, 253, 0, 0.2);
+        }
+
+        /* IMAGE GRID (SCREENSHOTS) */
+        .screenshot-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 20px;
+            background: #000;
+        }
+
+        .screen-wrapper {
+            border: 1px solid var(--border-muted);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .screen-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+            opacity: 0.85;
+            transition: opacity 0.3s;
+        }
+        
+        .screen-wrapper:hover img { opacity: 1; }
+
+        /* FEATURES GRID */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-muted);
+            padding: 20px;
+            position: relative;
+        }
+
+        .feature-card h3 { color: var(--accent-blue); }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .feature-list li::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 8px;
+            width: 6px; height: 6px;
+            background: var(--accent-green);
+            box-shadow: 0 0 5px var(--accent-green);
+            border-radius: 50%;
+        }
+
+        /* TECH TABLE */
+        .tech-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--font-code);
+            margin-bottom: 20px;
+        }
+
+        .tech-table th, .tech-table td {
+            border: 1px solid var(--border-muted);
+            padding: 12px;
+            text-align: left;
+        }
+
+        .tech-table th {
+            background: var(--bg-surface);
+            color: var(--accent-orange);
+        }
+
+        /* CODE BLOCKS (TERMINAL STYLE) */
+        .terminal {
+            background: #0a0a0a;
+            border: 1px solid var(--border-muted);
+            padding: 20px;
+            border-radius: 6px;
+            font-family: var(--font-code);
+            color: var(--accent-green);
+            position: relative;
+        }
+        
+        .terminal::before {
+            content: 'BASH_TERMINAL //';
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background: var(--bg-deep);
+            padding: 0 10px;
+            color: var(--border-muted);
+            font-size: 0.8rem;
+        }
+
+        .cmd { display: block; margin-bottom: 10px; }
+        .cmd::before { content: '$ '; color: var(--accent-orange); opacity: 0.8; }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 40px;
+            border-top: 1px solid var(--border-muted);
+            margin-top: 60px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        footer a { color: var(--accent-blue); text-decoration: none; }
+        footer a:hover { color: var(--accent-green); }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .screenshot-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 1.8rem; }
+            .nav-strip { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="rack-mount">
+            <nav class="nav-strip">
+                <a href="#overview" class="nav-link">Overview</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#architecture" class="nav-link">Architecture</a>
+                <a href="#interface" class="nav-link">Interface</a>
+                <a href="#install" class="nav-link">Install</a>
+            </nav>
+
+            <div class="hero">
+                <h1 class="hero-title">Poly<strong style="color:#FFF">Arbor</strong> <span style="color:var(--accent-orange)">Rhythm Generator</span></h1>
+                <span class="hero-subtitle">High-Performance Browser-Based Generative Polyrhythm Sequencer</span>
+                
+                <div class="badge-container" style="margin-top: 20px;">
+                    <img src="https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React 19" />
+                    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+                    <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+                    <img src="https://img.shields.io/badge/Web_Audio_API-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="Web Audio API" />
+                    <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License" />
+                </div>
+            </div>
+
+            <div class="screenshot-grid">
+                <div class="screen-wrapper">
+                    <img src="https://github.com/user-attachments/assets/cea4b849-30ee-495f-aac7-868c6bd01b0e" alt="Main Interface">
+                </div>
+                <div class="screen-wrapper">
+                    <img src="https://github.com/user-attachments/assets/f46dd8ef-7961-498e-a103-58701fa2d704" alt="Settings">
+                </div>
+                <div class="screen-wrapper">
+                    <img src="https://github.com/user-attachments/assets/d0564f3c-245c-4648-94b1-fd19c5504734" alt="Visualizer">
+                </div>
+            </div>
+        </div>
+
+        <section id="overview" class="rack-mount" style="padding: 30px;">
+            <h2>Overview</h2>
+            <p><strong>PolyArbor</strong> explores the mathematical relationship between conflicting time signatures and playback rates through the lens of organic procedural synthesis. Unlike standard sequencers that align to a rigid 4/4 grid, PolyArbor utilizes a cyclical timing engine where every rhythm layer operates on its own step count and speed multiplier relative to a global master cycle.</p>
+            <p style="color: var(--accent-blue)">This architecture creates phasing, polymetric patterns that evolve over time, visualized as a pulsating organic vector scope. Built with a focus on high-performance audio scheduling, the application mimics the aesthetic and reliability of a professional Digital Audio Workstation (DAW).</p>
+        </section>
+
+        <section id="features" style="margin-bottom: 40px;">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Audio Engine</h3>
+                    <ul class="feature-list">
+                        <li><strong>Web Audio API Core:</strong> Custom-built scheduling with lookahead timing for sample-accurate playback.</li>
+                        <li><strong>Procedural Synthesis:</strong> Real-time `OscillatorNodes`. No pre-recorded samples.</li>
+                        <li><strong>Primary Tone:</strong> Sine waves for body.</li>
+                        <li><strong>Accents:</strong> Triangle waves for phase reset triggers.</li>
+                        <li><strong>Spatial Audio:</strong> Individual stereo panning per channel.</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Sequencer</h3>
+                    <ul class="feature-list">
+                        <li><strong>Unlimited Polyphony:</strong> Up to 12 distinct rhythm layers.</li>
+                        <li><strong>Polyrhythmic Control:</strong> Steps (1-32) set independently.</li>
+                        <li><strong>Rate Multiplication:</strong> Decoupled speed (1/4x, 1/2x, 2x, 4x).</li>
+                        <li><strong>Pentatonic Scaling:</strong> Automatic harmonic consonance mapping.</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Visualizer</h3>
+                    <ul class="feature-list">
+                        <li><strong>Vector Scope:</strong> High-framerate Canvas radial tree graph.</li>
+                        <li><strong>Interpolated Animation:</strong> Decoupled from React render cycle for 60fps.</li>
+                        <li><strong>Responsive Design:</strong> ResizeObservers prevent stretching/pixelation.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture" class="rack-mount" style="padding: 30px;">
+            <h2>Technical Architecture</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                <div>
+                    <h3>Core Stack</h3>
+                    <table class="tech-table">
+                        <thead>
+                            <tr><th>Component</th><th>Technology</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Framework</td><td>React 19</td></tr>
+                            <tr><td>Language</td><td>TypeScript</td></tr>
+                            <tr><td>Styling</td><td>Tailwind CSS</td></tr>
+                            <tr><td>Iconography</td><td>Lucide React</td></tr>
+                            <tr><td>Audio</td><td>Web Audio API</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <h3>System Design</h3>
+                    <ul class="feature-list">
+                        <li><strong>Audio Service (Singleton):</strong> The <code>AudioEngine</code> class manages the context lifecycle and lookahead loop.</li>
+                        <li><strong>UI Context:</strong> Manages states like "Global Dragging" and Tooltips.</li>
+                        <li><strong>Component Library (SynthUI):</strong> Custom skeuomorphic controls (Knobs, LCDs, Switches) with vertical-drag behavior.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="interface" class="rack-mount" style="padding: 30px;">
+            <h2>User Interface</h2>
+            <p>The interface is styled after professional production software utilizing an "Industrial/DAW" theme.</p>
+            
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:20px; margin-top:20px;">
+                <div style="border:1px solid var(--border-muted); padding:15px; background:var(--bg-deep);">
+                    <h3 style="color:var(--accent-orange)">1. Top Toolbar</h3>
+                    <p style="font-size:0.9rem">Transport Controls, Tempo (CPM), Master Output Volume, and Info Panel.</p>
+                </div>
+                <div style="border:1px solid var(--border-muted); padding:15px; background:var(--bg-deep);">
+                    <h3 style="color:var(--accent-orange)">2. Channel Rack</h3>
+                    <p style="font-size:0.9rem">Mute/Solo, Pan/Vol Knobs, Step Counter (Geometry), and Rate Selector.</p>
+                </div>
+                <div style="border:1px solid var(--border-muted); padding:15px; background:var(--bg-deep);">
+                    <h3 style="color:var(--accent-orange)">3. Visualizer</h3>
+                    <p style="font-size:0.9rem">The "Poly Tree". Radial arms, pulse triggers, and "phosphor" trail aesthetics.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="install" class="rack-mount" style="padding: 30px;">
+            <h2>Getting Started</h2>
+            <p><strong>Prerequisites:</strong> Node.js (v16+) and npm/yarn.</p>
+            
+            <div class="terminal">
+                <span class="cmd">git clone https://github.com/dovvnloading/POLYARBOR-Rhythm-Generator.git</span>
+                <span class="cmd">cd POLYARBOR-Rhythm-Generator</span>
+                <span class="cmd">npm install</span>
+                <span class="cmd">npm start</span>
+            </div>
+            <p style="margin-top:10px; color:var(--accent-green)">> Application launches at http://localhost:3000</p>
+        </section>
+
+        <footer>
+            <p style="font-family: var(--font-code); margin-bottom:10px;">DEVELOPED BY MATTHEW ROBERT WESNEY</p>
+            <p>
+                <a href="https://github.com/dovvnloading">GITHUB PROFILE</a> • 
+                <a href="https://github.com/dovvnloading/POLYARBOR-Rhythm-Generator">REPOSITORY</a>
+            </p>
+            <p style="font-size: 0.8rem; margin-top: 20px; opacity: 0.5;">
+                Acknowledgments: Google DeepMind for AI-assisted workflows.
+            </p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
